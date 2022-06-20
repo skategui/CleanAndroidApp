@@ -17,8 +17,8 @@ class ArticlesRepository(private val service: ArticlesService) : IArticlesReposi
      * in consideration the article with missing informations
      *  @return [List] [Article] Response from the server, containing the list of articles if success
      */
-    override suspend fun getBusinessArticles() =
-        service.getBusinessArticles(BuildConfig.NEWS_API_KEY)
+    override suspend fun getBusinessArticles(key: String) =
+        service.getBusinessArticles(key)
             .body()!!.articles
             .filter { it.isValid() } // does not keep the ones who have missing info
             .map { it.toArticle() } // convert into the object we are going to manipulate, with less attributes
@@ -29,5 +29,5 @@ class ArticlesRepository(private val service: ArticlesService) : IArticlesReposi
  * PS : it's a bit over engineered for this interface, but useful for the unit tests :)
  */
 interface IArticlesRepository {
-    suspend fun getBusinessArticles(): List<Article>
+    suspend fun getBusinessArticles(key : String): List<Article>
 }

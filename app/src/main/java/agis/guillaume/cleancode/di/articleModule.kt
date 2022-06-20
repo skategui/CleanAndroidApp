@@ -1,5 +1,6 @@
 package agis.guillaume.cleancode.di
 
+import agis.guillaume.cleancode.BuildConfig
 import agis.guillaume.cleancode.api.services.ArticlesService
 import agis.guillaume.cleancode.api.services.PostService
 import agis.guillaume.cleancode.datastore.article.ArticlesDatastore
@@ -23,7 +24,7 @@ val articleModule = module {
                 .create(ArticlesService::class.java)
         )
     }
-    factory { ArticlesUseCase(articlesRepository = get(), articleDatastore = get()) }
+    factory { ArticlesUseCase(articlesRepository = get(), articleDatastore = get(), apiKey = BuildConfig.NEWS_API_KEY) }
     factory<ArticlesDatastore> { ArticlesLocalDatastore(articleDao = get()) }
     viewModel { ArticlesListViewModel(articlesUseCase = get(), articleReducer = ArticleReducer()) }
 }

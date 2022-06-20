@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyArticle</string>
+    <string name="app_name">CheckNews</string>
     <string name="card_post_see_more_btn">see more</string>
     <string name="error_try_again_later">An error occurred. Please try again later</string>
     <string name="loading_in_progress">Loading in progress</string>

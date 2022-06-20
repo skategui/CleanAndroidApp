@@ -25,10 +25,12 @@ internal class ArticlesUseCaseTest {
 
     private lateinit var usecase: ArticlesUseCase
 
+    private val apiKey = "my_key"
+
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        usecase = ArticlesUseCase(repo, datastore)
+        usecase = ArticlesUseCase(repo, datastore, apiKey)
         coEvery { datastore.saveArticles(any()) } returns Unit
     }
 
@@ -56,7 +58,7 @@ internal class ArticlesUseCaseTest {
             )
         )
 
-        coEvery { repo.getBusinessArticles() } returns validArticles
+        coEvery { repo.getBusinessArticles(apiKey) } returns validArticles
         usecase.loadArticles().test {
             val res = awaitItem()
             Assert.assertTrue(res is ResultOf.Success<Unit>)
@@ -65,13 +67,29 @@ internal class ArticlesUseCaseTest {
     }
 
     @Test
-    fun `When loading article is a failing then emit Falure with the message`() = runTest {
+    fun `When loading article is a failing then emit Failure with the message`() = runTest {
         val errorrMsg = "my error"
-        coEvery { repo.getBusinessArticles() } throws Exception(errorrMsg)
+        coEvery { repo.getBusinessArticles(apiKey) } throws Exception(errorrMsg)
         usecase.loadArticles().test {
             val res = awaitItem()
             val failureMsg = res as ResultOf.Failure
             Assert.assertEquals(errorrMsg, failureMsg.exception!!.message)
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `When loading article without updating the API key will throw an error`() = runTest {
+
+        val errorrMsg = "my error"
+
+        val usecase = ArticlesUseCase(repo, datastore, ArticlesUseCase.API_KEY_NOT_ADDED)
+
+        coEvery { repo.getBusinessArticles(apiKey) } throws Exception(errorrMsg)
+        usecase.loadArticles().test {
+            val res = awaitItem()
+            val failureMsg = res as ResultOf.Failure
+            Assert.assertEquals(ArticlesUseCase.API_KEY_ERROR_MSG, failureMsg.exception!!.message)
             awaitComplete()
         }
     }

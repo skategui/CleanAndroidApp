@@ -1,6 +1,5 @@
 package agis.guillaume.cleancode.repository
 
-import agis.guillaume.cleancode.BuildConfig
 import agis.guillaume.cleancode.api.model.ArticleResponse
 import agis.guillaume.cleancode.api.model.ArticlesResponse
 import agis.guillaume.cleancode.api.model.SourceResponse
@@ -23,6 +22,9 @@ internal class ArticlesRepositoryTest {
     private lateinit var service: ArticlesService
 
     private lateinit var repo : ArticlesRepository
+
+    private val apiKey = "my_key"
+
     @Before
     fun setup(){
         MockKAnnotations.init(this)
@@ -54,11 +56,11 @@ internal class ArticlesRepositoryTest {
                 publishedAt = Date()
             )
         )
-        coEvery { service.getBusinessArticles(BuildConfig.NEWS_API_KEY) } returns Response.success(ArticlesResponse(validArticles))
+        coEvery { service.getBusinessArticles(apiKey) } returns Response.success(ArticlesResponse(validArticles))
 
         val expected = validArticles.map { it.toArticle() }
 
-        assertEquals(expected, repo.getBusinessArticles())
+        assertEquals(expected, repo.getBusinessArticles(apiKey))
     }
 
     @Test
@@ -102,11 +104,11 @@ internal class ArticlesRepositoryTest {
                 publishedAt = Date()
             )
         )
-        coEvery { service.getBusinessArticles(BuildConfig.NEWS_API_KEY) } returns Response.success(ArticlesResponse(articles))
+        coEvery { service.getBusinessArticles(apiKey) } returns Response.success(ArticlesResponse(articles))
 
         val expected = validArticle.toArticle()
 
-        assertEquals(listOf(expected), repo.getBusinessArticles())
+        assertEquals(listOf(expected), repo.getBusinessArticles(apiKey))
     }
 
 }

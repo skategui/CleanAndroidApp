@@ -5,11 +5,13 @@ import agis.guillaume.cleancode.datastore.article.ArticlesDatastore
 import agis.guillaume.cleancode.model.Article
 import agis.guillaume.cleancode.model.Post
 import agis.guillaume.cleancode.repository.IArticlesRepository
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.security.InvalidKeyException
 
 /**
  * ArticlesUseCase is responsible to manage all the business logic related to the articles
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.flowOn
 class ArticlesUseCase(
     private val articlesRepository: IArticlesRepository,
     private val articleDatastore: ArticlesDatastore,
+    private val apiKey : String,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit tests
 ) {
 
@@ -26,8 +29,13 @@ class ArticlesUseCase(
      */
     suspend fun loadArticles(): Flow<ResultOf<Unit>> {
         return flow {
+
+            if (apiKey == API_KEY_NOT_ADDED) {
+                emit(ResultOf.Failure(exception = InvalidKeyException(API_KEY_ERROR_MSG)))
+                return@flow
+            }
             try {
-                val articles = articlesRepository.getBusinessArticles()
+                val articles = articlesRepository.getBusinessArticles(apiKey)
                 articleDatastore.saveArticles(articles)
                 emit(ResultOf.Success(Unit))
             } catch (e: Exception) {
@@ -43,5 +51,14 @@ class ArticlesUseCase(
      */
     fun getLoadedArticles(): Flow<List<Article>> {
         return articleDatastore.getArticles()
+    }
+
+    companion object {
+        @VisibleForTesting
+         val API_KEY_NOT_ADDED = "ADD_YOUR_API_KEY_HERE"
+
+        // does not need to be translated as it's only for the dev
+        @VisibleForTesting
+        val API_KEY_ERROR_MSG = "You did not add your NEWS API KEY to the project"
     }
 }
