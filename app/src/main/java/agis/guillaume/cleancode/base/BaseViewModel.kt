@@ -6,11 +6,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-interface UserEvent
+interface UserInteraction
 interface UiState
 interface UiSingleEvent
 
-abstract class BaseViewModel<Event : UserEvent, State : UiState, SingleEvent : UiSingleEvent> : ViewModel() {
+abstract class BaseViewModel<Event : UserInteraction, State : UiState, SingleEvent : UiSingleEvent> : ViewModel() {
 
     // Create Initial State of View
     private val initialState : State by lazy { createInitialState() }

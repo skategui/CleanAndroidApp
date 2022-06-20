@@ -1,46 +1,30 @@
 # MVI + Compose + Coroutine Flow 2022
 
+Sample app using the latest android tools. 
 
-### Architecture, language and tools used to make this app
+### Architecture, language and tools used to make this app 💪
 
-- MVI (Model View Intent)
-- Clean architecture
-- Koin
-- Coroutine (with Flow)
-- Retrofit
-- JUnit
-- Kotlin
-- LifeCycle
-- Compose (Used in the latest edition 2022)
-- View binding (only used in the old Edition 2019, to show the other way of interacting with the views)
-- Proguard (to obfuscate the code)
+- 🔨Kotlin : Language of dev
+- ♻️ MVI (Model View Intent) : It's an unidirectional flow a reducer to create the new State . [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/base/BaseViewModel.kt) 
+- 🧹 Clean architecture : To well structured the app
+- 💉 Koin : to inject deps [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/di)
+- 📈 Coroutine (with Flow) : to make the app fully reactive (only the Edition summer 2022, newest version of the app) [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/article/ArticlesListViewModel.kt)
+- 🛰️ Retrofit : To make HTTP requests [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/api/services/ArticlesService.kt)
+- 🏠 Room : Local DB  [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/datastore/article)
+- 👀 JUnit with Turbine and Mockk : Added 35+ unit tests to cover the code [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/test/java/agis/guillaume/cleancode/ui/article)
+- 🖼️ Compose  : Used in the summer edition 2022 [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/ui/compose)
+- 🖼️ View binding : Only used in the old Edition 2019, to show the other way of interacting with the views. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/post/PostListActivity.kt)
+- 🔒 Proguard  : to obfuscate and minify the code.  [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)
 
+### Usage of Flow 🤟
 
-### What it is about ? 
-
-The app should have two screens, as follows:
-
-First screen will display the edition of news of 2022 as a list.
-Clicking on the article will redirect on the main website, inside Chrome.
-
-Second screen is based on the old app available in that repo where I re-used the same logic, and just update
-the code,libs, and way of interacting with the view.
-
-Both activities work (+/-) the same way : 
-
-They display a message "In progress" with a lottie animation while fetching the list of posts from the server and if we do receive a list of posts, the list is displayed.
-For each row, the user avatar is loaded with the post's title and the post's body. 
-In the case there is a network issue, an error message with a lottie animation is displayed with a button to have the possibility to refresh the view.
-in the case the list of posts is empty, a message is displayed to the user informing him that list is empty.
-
-
-### Usage of Flow
-
-Inside the ArticleDatastore, ArticleDao and ArticleUseCase , as soon as the local DB is updated, then a flow will emit the latest version of the article
+Inside the ArticleDatastore, ArticleDao and ArticleUseCase, as soon as the local DB is updated, then a flow will emit the latest version of the article
 to the viewmodel , and then render this new list of articles on the view. It's fully **reactive**.
 
+PostActivity is an old app I 've made in 2019 and just make it "up to date". Better to watch the code about ArticleActivity as it contains Compose, Coroutine Flow, MVI, etc...
 
-### Improvements that could be made in the future
+
+### Improvements that could be made in the future 💡
 
 - Architecture : usage of multi module in a mono repo : to split up the team work and make the build faster (as it will only recompile the module modified and not the whole project), where each module could be a big feature.
   Also, each module will be able to use the config, then use the same version of each dependencies. 
@@ -55,13 +39,9 @@ to the viewmodel , and then render this new list of articles on the view. It's f
   Benchmark of the performance : https://codeburst.io/json-vs-protocol-buffers-vs-flatbuffers-a4247f8bda6f
 - UI: Move the composable UI inside a Constraintlayout to improve performance.
 - UI: Setup dark mode
-
-- Requests content : Populate object in the JSON instead of providing only the object's id and make another request to get the full object.
-  For instance, in the Post object we could have received the user object instead of only the Id ,or only **the fields needed** to have smaller response).
-  [GraphQL](https://graphql.org/) proposes this feature, and then help reduce response size, then speed up the response time.
-
 - App : Create a light version / less greedy of the app for country that does not have high quality android devices (such as in Africa and Asia)
 - CI : Add a CI to build + run the unit tests after each commit / add a nightly build that will run all the tests (junit + espresso, as it's longer to run).
+- ....
 
 
 By Guillaume Agis - 2022

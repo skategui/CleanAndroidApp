@@ -10,8 +10,6 @@ import agis.guillaume.cleancode.ui.post.adapter.PostsAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +24,7 @@ class PostListActivity : AppCompatActivity() {
 
     private val viewModel: PostsListViewModel by viewModel()
     private lateinit var binding: ActivityListPostsBinding
-    private val adapter = PostsAdapter { viewModel.setEvent(PostsListContract.Event.PostClicked(it)) }
+    private val adapter = PostsAdapter { viewModel.setEvent(PostsListContract.Interaction.PostClicked(it)) }
 
     companion object {
         fun start(context: Context) {
@@ -74,7 +72,7 @@ class PostListActivity : AppCompatActivity() {
     private fun initObservers() {
         lifecycleScope.launchWhenStarted {
 
-            binding.reloadBtn.setOnClickListener { viewModel.setEvent(PostsListContract.Event.ReloadButtonClicked) }
+            binding.reloadBtn.setOnClickListener { viewModel.setEvent(PostsListContract.Interaction.ReloadButtonClicked) }
 
             viewModel.uiState.collect { state -> currentState(state.posts, state.isLoading) }
         }

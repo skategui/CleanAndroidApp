@@ -5,7 +5,6 @@ import agis.guillaume.cleancode.api.utils.doIfFailure
 import agis.guillaume.cleancode.api.utils.doIfSuccess
 import agis.guillaume.cleancode.base.BaseViewModel
 import agis.guillaume.cleancode.tracker.Tracker
-import agis.guillaume.cleancode.ui.post.PostReducer
 import agis.guillaume.cleancode.usecases.ArticlesUseCase
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +21,7 @@ class ArticlesListViewModel(
     private val articleReducer: ArticleReducer,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit test
 ) :
-    BaseViewModel<ArticlesListContract.Event, ArticlesListContract.State, ArticlesListContract.SingleEvent>() {
+    BaseViewModel<ArticlesListContract.Interaction, ArticlesListContract.State, ArticlesListContract.SingleEvent>() {
 
     init {
         fetchArticles()
@@ -86,12 +85,12 @@ class ArticlesListViewModel(
     /**
      * EVent received from the user interaction, from the UI
      */
-    override fun subscribeUserInteraction(event: ArticlesListContract.Event) {
+    override fun subscribeUserInteraction(event: ArticlesListContract.Interaction) {
         when (event) {
-            is ArticlesListContract.Event.ArticleClicked -> setSingleEvent {
+            is ArticlesListContract.Interaction.ArticleClicked -> setSingleEvent {
                 ArticlesListContract.SingleEvent.OpenArticle(event.article.url)
             }
-            is ArticlesListContract.Event.ReloadButtonClicked -> fetchArticles()
+            is ArticlesListContract.Interaction.ReloadButtonClicked -> fetchArticles()
         }
     }
 }

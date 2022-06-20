@@ -11,6 +11,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * PostsAdapter displays the list of posts in the recyclerview
+ * @param onItemClicked callback (labmda) when an item from the list is clicked
+ */
 class PostsAdapter( private val onItemClicked: (post: Post) -> Unit) : RecyclerView.Adapter<PostsAdapter.PostViewHolder>(){
     private val posts = ArrayList<Post>()
     private val diffCallback = DiffCallback()

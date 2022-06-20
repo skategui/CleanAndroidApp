@@ -23,5 +23,4 @@ class UserTypeConverter {
         val objectType = object : TypeToken<User>() {}.type
         return gson.fromJson(userString, objectType)
     }
-
 }

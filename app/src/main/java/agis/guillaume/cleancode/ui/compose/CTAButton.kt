@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 /**
  * Button part of the design component . This button can be reused
- * All modifications of the button here will update all the buttons in the apps
+ * All modifications of the button here will update all the buttons in the app
  */
 @Composable
 fun CTAButton(@StringRes labelResID: Int, onClick: () -> Unit) {

@@ -118,7 +118,7 @@ internal class PostsListViewModelTest {
 
         createViewModel()
 
-        viewModel.setEvent(PostsListContract.Event.ReloadButtonClicked)
+        viewModel.setEvent(PostsListContract.Interaction.ReloadButtonClicked)
 
         coVerify(exactly = 2) {
             usecase.getPosts()
@@ -135,7 +135,7 @@ internal class PostsListViewModelTest {
 
         val post = posts.first()
 
-        viewModel.setEvent(PostsListContract.Event.PostClicked(post))
+        viewModel.setEvent(PostsListContract.Interaction.PostClicked(post))
 
         viewModel.singleEvent.test {
             val state = awaitItem()

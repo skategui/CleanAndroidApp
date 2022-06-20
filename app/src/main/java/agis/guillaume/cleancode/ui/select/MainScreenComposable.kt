@@ -3,7 +3,9 @@ package agis.guillaume.cleancode.ui.select
 
 import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.ui.article.ArticlesListActivity
+import agis.guillaume.cleancode.ui.compose.BigSpacer
 import agis.guillaume.cleancode.ui.compose.CTAButton
+import agis.guillaume.cleancode.ui.compose.MediumSpacer
 import agis.guillaume.cleancode.ui.post.PostListActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -41,7 +43,7 @@ fun MainScreen() {
             painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.logo_content_description)
         )
-        Spacer(modifier = Modifier.height(48.dp))
+        BigSpacer()
         Text(
             stringResource(R.string.intro_welcome_msg),
             textAlign = TextAlign.Center,
@@ -49,13 +51,13 @@ fun MainScreen() {
             color = colorResource(id = R.color.colorPrimary),
             style = MaterialTheme.typography.h5
         )
-        Spacer(modifier = Modifier.height(48.dp))
+        BigSpacer()
         CTAButton(
             labelResID = R.string.intro_new_collection,
             onClick = {
                 ArticlesListActivity.start(context)
             })
-        Spacer(modifier = Modifier.height(24.dp))
+        MediumSpacer()
         CTAButton(
             labelResID = R.string.intro_old_collection,
             onClick = {

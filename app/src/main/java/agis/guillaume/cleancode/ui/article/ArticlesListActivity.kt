@@ -1,9 +1,7 @@
 package agis.guillaume.cleancode.ui.article
 
-import agis.guillaume.cleancode.model.Article
+import agis.guillaume.cleancode.tracker.Tracker
 import agis.guillaume.cleancode.ui.compose.MainScreen
-import agis.guillaume.cleancode.ui.compose.displayErrorContent
-import agis.guillaume.cleancode.ui.post.PostsListContract
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -54,6 +52,7 @@ class ArticlesListActivity : AppCompatActivity() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(newUrl))
             ContextCompat.startActivity(this, browserIntent, null)
         } catch (e : Exception) {
+            Tracker.trackError(e)
             // no activity detected
         }
 

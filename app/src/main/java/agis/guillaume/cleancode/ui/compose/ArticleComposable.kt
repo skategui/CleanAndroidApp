@@ -2,11 +2,8 @@ package agis.guillaume.cleancode.ui.compose
 
 import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.model.Article
-import agis.guillaume.cleancode.ui.article.ArticlesListActivity
 import agis.guillaume.cleancode.ui.article.ArticlesListContract
 import agis.guillaume.cleancode.ui.article.ArticlesListViewModel
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +27,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.*
 import java.text.SimpleDateFormat
@@ -48,7 +43,7 @@ fun MainScreen(
     when {
         state.isLoading -> LoadingStateContent()
         state.articles.isNotEmpty() -> displayListArticlesContent(state.articles) {article -> viewModel.setEvent(
-            ArticlesListContract.Event.ArticleClicked(article)
+            ArticlesListContract.Interaction.ArticleClicked(article)
         )}
         state.articles.isEmpty() -> displayEmptyArticleContent()
     }

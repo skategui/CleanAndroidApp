@@ -18,9 +18,11 @@
     <dimen name="btn_textsize">16sp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="btn_radius">10dp</dimen>
-    bg_card_radius
-    <dimen name="item_post_see_more_margin_left">20dp</dimen>X
+    <dimen name="item_post_see_more_margin_left">20dp</dimen>
 
+    <dimen name="small_spacer">12dp</dimen>
+    <dimen name="medium_spacer">24dp</dimen>
+    <dimen name="big_spacer">48dp</dimen>
 
     <!-- List posts activity -->
     <dimen name="animation_size">150dp</dimen>

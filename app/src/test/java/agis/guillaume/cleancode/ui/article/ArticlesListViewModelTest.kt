@@ -164,7 +164,7 @@ internal class ArticlesListViewModelTest {
 
         createViewModel()
 
-        viewModel.setEvent(ArticlesListContract.Event.ArticleClicked(article))
+        viewModel.setEvent(ArticlesListContract.Interaction.ArticleClicked(article))
 
         viewModel.singleEvent.test {
             val state = awaitItem()
@@ -181,7 +181,7 @@ internal class ArticlesListViewModelTest {
 
         createViewModel()
 
-        viewModel.setEvent(ArticlesListContract.Event.ReloadButtonClicked)
+        viewModel.setEvent(ArticlesListContract.Interaction.ReloadButtonClicked)
 
         coVerify(exactly = 2) {
             usecase.loadArticles()

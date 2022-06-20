@@ -21,7 +21,7 @@ class PostsListViewModel(
     private val postReducer: PostReducer,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit test
 ) :
-    BaseViewModel<PostsListContract.Event, PostsListContract.State, PostsListContract.SingleEvent>() {
+    BaseViewModel<PostsListContract.Interaction, PostsListContract.State, PostsListContract.SingleEvent>() {
 
     init { fetchPosts() }
 
@@ -57,14 +57,14 @@ class PostsListViewModel(
     override fun createInitialState() = PostsListContract.State()
 
     /**
-     * EVent received from the user interaction, from the UI
+     * Event received from the user interaction, from the UI
      */
-    override fun subscribeUserInteraction(event: PostsListContract.Event) {
+    override fun subscribeUserInteraction(event: PostsListContract.Interaction) {
         when (event) {
-            is PostsListContract.Event.PostClicked -> setSingleEvent {
+            is PostsListContract.Interaction.PostClicked -> setSingleEvent {
                 PostsListContract.SingleEvent.DisplayPostDetail(event.post)
             }
-            is PostsListContract.Event.ReloadButtonClicked -> fetchPosts()
+            is PostsListContract.Interaction.ReloadButtonClicked -> fetchPosts()
         }
     }
 }
