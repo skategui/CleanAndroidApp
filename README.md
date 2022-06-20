@@ -16,6 +16,11 @@ Sample app using the latest android tools.
 - 🖼️ View binding : Only used in the old Edition 2019, to show the other way of interacting with the views. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/post/PostListActivity.kt)
 - 🔒 Proguard : to obfuscate and minify the code. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)
 
+### How to run the app
+
+You should get yourself an API key from News API (https://newsapi.org/) and add it inside `variables.properties`.
+Otherwise without this, you will get an error message.
+
 ### Usage of Flow 🤟
 
 Inside the ArticleDatastore, ArticleDao and ArticleUseCase, as soon as the local DB is updated, then a flow will emit the latest version of the article
