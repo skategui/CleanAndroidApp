@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MyArticle</string>
+    <string name="card_post_see_more_btn">see more</string>
+    <string name="error_try_again_later">An error occurred. Please try again later</string>
+    <string name="loading_in_progress">Loading in progress</string>
+    <string name="error_no_post_available">No posts available for now</string>
+    <string name="error_no_internet_connexion">You are not connected to internet</string>
+    <string name="refresh">Refresh</string>
+    <string name="post_author_info">By %s</string>
+    <string name="coming_soon">Article \"%s\" is coming soon</string>
+    <string name="logo_content_description">Logo of the app</string>
+    <string name="intro_welcome_msg">Welcome in this article app</string>
+    <string name="intro_new_collection">Edition summer 2022</string>
+    <string name="intro_old_collection">Edition winter 2019</string>
+    <string name="intro_author">By Guillaume Agis</string>
+    <string name="article_image_content_description">Thumbnail of the article</string>
+    <string name="article_source">By %s from %s</string>
+    <string name="error_no_article_available">No article available for now</string>
+    <string name="latest_tech_news_title">Latest technology news</string>
+    <string name="latest_lorem_news_title">Latest lorem ipsum news</string>
+</resources>

@@ -1,0 +1,29 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Config                                                                                         //
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Config {
+    Properties variablesProperties
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pull in config properties                                                                      //
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ext {
+    config = new Config()
+    def basePath = rootDir.absolutePath + "/"
+
+    config.variablesProperties = new Properties()
+    def commonPropertiesFileName = "variables.properties"
+    config.variablesProperties.load(new FileInputStream(rootProject.file((basePath + commonPropertiesFileName))))
+}
+
+
+android {
+    defaultConfig {
+        buildConfigField "String", "AVATAR_BASE_URL", "\"${config.variablesProperties.avatar_base_url}\""
+        buildConfigField "String", "NEWS_API_KEY", "\"${config.variablesProperties.news_api_key}\""
+        buildConfigField "String", "NEWS_BASE_URL", "\"${config.variablesProperties.news_base_url}\""
+    }
+}

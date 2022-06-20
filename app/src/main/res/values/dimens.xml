@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- *View Attribute -->
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="card_avatar_size">60dp</dimen>
+    <dimen name="card_margin_hor">16dp</dimen>
+    <dimen name="card_margin_around">10dp</dimen>
+    <dimen name="card_margin_top">15dp</dimen>
+    <dimen name="card_margin_divider_top">25dp</dimen>
+    <dimen name="card_body_textsize">14sp</dimen>
+    <dimen name="card_reference_textsize">12sp</dimen>
+    <dimen name="title_textsize">28sp</dimen>
+    <dimen name="btn_height">42dp</dimen>
+    <dimen name="btn_width">250dp</dimen>
+    <dimen name="btn_textsize">16sp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="btn_radius">10dp</dimen>
+    bg_card_radius
+    <dimen name="item_post_see_more_margin_left">20dp</dimen>X
+
+
+    <!-- List posts activity -->
+    <dimen name="animation_size">150dp</dimen>
+    <dimen name="list_post_shadow_height">60dp</dimen>
+    <dimen name="list_post_animation_margin_top">48dp</dimen>
+    <dimen name="list_post_recyclerview_padding_bottom">20dp</dimen>
+    <dimen name="item_margin_vertical">48dp</dimen>
+
+</resources>
