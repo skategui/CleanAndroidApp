@@ -6,6 +6,7 @@ import agis.guillaume.cleancode.api.utils.doIfSuccess
 import agis.guillaume.cleancode.base.BaseViewModel
 import agis.guillaume.cleancode.tracker.Tracker
 import agis.guillaume.cleancode.usecases.ArticlesUseCase
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

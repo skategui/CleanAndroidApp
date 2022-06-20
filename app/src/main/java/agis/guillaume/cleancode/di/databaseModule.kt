@@ -13,7 +13,9 @@ val databaseModule = module {
             androidApplication(),
             MyAppDatabase::class.java,
             "myapp_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     single {

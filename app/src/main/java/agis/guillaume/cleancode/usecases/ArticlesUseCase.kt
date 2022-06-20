@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import java.security.InvalidKeyException
 
@@ -20,7 +21,7 @@ import java.security.InvalidKeyException
 class ArticlesUseCase(
     private val articlesRepository: IArticlesRepository,
     private val articleDatastore: ArticlesDatastore,
-    private val apiKey : String,
+    private val apiKey: String,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit tests
 ) {
 
@@ -28,20 +29,18 @@ class ArticlesUseCase(
      * Load articles from the server and store them in the local DB
      */
     suspend fun loadArticles(): Flow<ResultOf<Unit>> {
-        return flow {
-
-            if (apiKey == API_KEY_NOT_ADDED) {
-                emit(ResultOf.Failure(exception = InvalidKeyException(API_KEY_ERROR_MSG)))
-                return@flow
-            }
-            try {
-                val articles = articlesRepository.getBusinessArticles(apiKey)
-                articleDatastore.saveArticles(articles)
-                emit(ResultOf.Success(Unit))
-            } catch (e: Exception) {
-                emit(ResultOf.Failure(exception = e))
-            }
-        }.flowOn(ioDispatcher)
+        return if (apiKey == API_KEY_NOT_ADDED) {
+            flowOf(ResultOf.Failure(message = API_KEY_ERROR_MSG))
+        } else
+            flow {
+                try {
+                    val articles = articlesRepository.getBusinessArticles(apiKey)
+                    articleDatastore.saveArticles(articles)
+                    emit(ResultOf.Success(Unit))
+                } catch (e: Exception) {
+                    emit(ResultOf.Failure(exception = e))
+                }
+            }.flowOn(ioDispatcher)
     }
 
     /**
@@ -55,7 +54,7 @@ class ArticlesUseCase(
 
     companion object {
         @VisibleForTesting
-         val API_KEY_NOT_ADDED = "ADD_YOUR_API_KEY_HERE"
+        val API_KEY_NOT_ADDED = "ADD_YOUR_API_KEY_HERE"
 
         // does not need to be translated as it's only for the dev
         @VisibleForTesting

@@ -101,7 +101,7 @@ class PostListActivity : AppCompatActivity() {
      */
     private fun displayEmptyListMessage() = with(binding) {
         stateContainer.visible()
-        animation.setAnimation(R.raw.empty_list_animation)
+        animation.setAnimation(R.raw.sad_smiley)
         stateTitle.text = getString(R.string.error_no_post_available)
         animation.playAnimation()
         hideRecyclerView()

@@ -15,6 +15,7 @@ Sample app using the latest android tools.
 - 🖼️ Compose : Used in the summer edition 2022 [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/ui/compose)
 - 🖼️ View binding : Only used in the old Edition 2019, to show the other way of interacting with the views. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/post/PostListActivity.kt)
 - 🔒 Proguard : to obfuscate and minify the code. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)
+- Lottie : To add animations
 
 ### How to run the app
 
@@ -43,6 +44,7 @@ PostActivity is an old app I 've made in 2019 and just make it "up to date". Bet
 - Network :  use https://developers.google.com/protocol-buffers/ or https://google.github.io/flatbuffers/ to **transit smaller on-the-wire packet size, then make the requests faster**.
   Benchmark of the performance : https://codeburst.io/json-vs-protocol-buffers-vs-flatbuffers-a4247f8bda6f
 - UI: Move the composable UI inside a Constraintlayout to improve performance.
+- UI:  Move theme inside Theme.kt for Compose 
 - UI: Setup dark mode
 - App : Create a light version / less greedy of the app for country that does not have high quality android devices (such as in Africa and Asia)
 - CI : Add a CI to build + run the unit tests after each commit / add a nightly build that will run all the tests (junit + espresso, as it's longer to run).

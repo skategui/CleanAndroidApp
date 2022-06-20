@@ -4,6 +4,8 @@ import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.model.Article
 import agis.guillaume.cleancode.ui.article.ArticlesListContract
 import agis.guillaume.cleancode.ui.article.ArticlesListViewModel
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -32,26 +35,30 @@ import com.airbnb.lottie.compose.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 @Composable
 fun MainScreen(
-    viewModel: ArticlesListViewModel
+    viewModel: ArticlesListViewModel,
+    openArticle: (url: String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
-    val singleEvent by viewModel.singleEvent.collectAsState(null)
-
+    Log.e("ERROR", "state : $state")
     when {
         state.isLoading -> LoadingStateContent()
-        state.articles.isNotEmpty() -> displayListArticlesContent(state.articles) {article -> viewModel.setEvent(
-            ArticlesListContract.Interaction.ArticleClicked(article)
-        )}
+        state.articles.isNotEmpty() -> displayListArticlesContent(state.articles) { article ->
+            viewModel.setEvent(
+                ArticlesListContract.Interaction.ArticleClicked(article)
+            )
+        }
         state.articles.isEmpty() -> displayEmptyArticleContent()
     }
 
+
+    val singleEvent by viewModel.singleEvent.collectAsState(initial = null)
     when (singleEvent) {
-        is ArticlesListContract.SingleEvent.DisplayErrorPopup -> displayErrorContent()
-        ArticlesListContract.SingleEvent.DisplayInternetLostMessage -> displayNoInternetContent()
-        else -> {}
+        is ArticlesListContract.SingleEvent.DisplayErrorPopup -> displayErrorContent((singleEvent as ArticlesListContract.SingleEvent.DisplayErrorPopup).message)
+        is ArticlesListContract.SingleEvent.DisplayInternetLostMessage -> displayNoInternetContent()
+        is ArticlesListContract.SingleEvent.OpenArticle -> openArticle((singleEvent as ArticlesListContract.SingleEvent.OpenArticle).url)
+        null -> {}
     }
 }
 
@@ -65,16 +72,14 @@ fun LoadingStateContent() {
         iterations = LottieConstants.IterateForever
     )
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = stringResource(id = R.string.loading_in_progress),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.colorPrimary)
-        )
+        Title(id = R.string.loading_in_progress)
         BigSpacer()
         LottieAnimation(
             composition,
@@ -94,11 +99,15 @@ fun loadingPreview() {
 // LIST ARTICLES CONTENT
 
 
-
 @Composable
-fun displayListArticlesContent(articles: List<Article>, openArticle : (article: Article) -> Unit) {
+fun displayListArticlesContent(
+    articles: List<Article>,
+    openArticle: (article: Article) -> Unit
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MediumSpacer()
@@ -106,7 +115,7 @@ fun displayListArticlesContent(articles: List<Article>, openArticle : (article: 
             text = stringResource(id = R.string.latest_tech_news_title),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = colorResource(id = R.color.colorPrimary)
+            color = ColorPrimary
         )
         MediumSpacer()
         LazyColumn(content = {
@@ -116,7 +125,7 @@ fun displayListArticlesContent(articles: List<Article>, openArticle : (article: 
 }
 
 @Composable
-private fun ArticleCardItem(article: Article, openArticle : (article: Article) -> Unit) {
+private fun ArticleCardItem(article: Article, openArticle: (article: Article) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +144,7 @@ private fun ArticleCardItem(article: Article, openArticle : (article: Article) -
             )
             SmallSpacer()
             Text(
-                modifier = Modifier.padding(horizontal = 15.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.subtitle1,
@@ -143,7 +152,7 @@ private fun ArticleCardItem(article: Article, openArticle : (article: Article) -
             )
             SmallSpacer()
             Text(
-                modifier = Modifier.padding(horizontal = 15.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
@@ -153,7 +162,7 @@ private fun ArticleCardItem(article: Article, openArticle : (article: Article) -
             )
             SmallSpacer()
             Text(
-                modifier = Modifier.padding(horizontal= 15.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
                 fontSize = 10.sp,
@@ -162,7 +171,7 @@ private fun ArticleCardItem(article: Article, openArticle : (article: Article) -
             val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm")
             val formattedDate = formatter.format(article.publishedAt)
             Text(
-                modifier = Modifier.padding(horizontal = 15.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
                 fontSize = 10.sp,
@@ -190,9 +199,8 @@ fun listPreview() {
 
             )
         )
-    ){}
+    ) {}
 }
-
 
 
 // EMPTY LIST ARTICLES CONTENT
@@ -200,23 +208,21 @@ fun listPreview() {
 
 @Composable
 fun displayEmptyArticleContent() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_list_animation))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sad_smiley))
     val progress by animateLottieCompositionAsState(
         composition,
         iterations = LottieConstants.IterateForever
     )
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = stringResource(id = R.string.error_no_article_available),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.colorPrimary)
-        )
+        Title(id = R.string.error_no_article_available)
         LottieAnimation(
             composition,
             progress,
@@ -232,34 +238,31 @@ fun emptyListPreview() {
 }
 
 
-
 // ERROR CONTENT
 
 @Composable
-fun displayErrorContent() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error_animation))
+fun displayErrorContent(errorMsg: String? = null) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sad_smiley))
     val progress by animateLottieCompositionAsState(
         composition,
         iterations = LottieConstants.IterateForever
     )
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp)
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.error_try_again_later),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.colorPrimary)
-        )
-        BigSpacer()
+        Title(errorMsg ?: stringResource(id = R.string.error_try_again_later))
+        MediumSpacer()
         LottieAnimation(
             composition,
             progress,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(dimensionResource(id = R.dimen.animation_size).value.dp)
         )
     }
 }
@@ -282,21 +285,20 @@ fun displayNoInternetContent() {
     )
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp)
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = stringResource(id = R.string.error_no_internet_connexion),
-            fontSize = 24.sp,
-            color = colorResource(id = R.color.colorPrimary)
-        )
-        BigSpacer()
+        Title(id = R.string.error_no_internet_connexion)
+        MediumSpacer()
         LottieAnimation(
             composition,
             progress,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(dimensionResource(id = R.dimen.animation_size).value.dp)
         )
         BigSpacer()
         CTAButton(

@@ -9,8 +9,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collectLatest
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
@@ -28,19 +26,7 @@ class ArticlesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MainScreen(viewModel = viewModel) }
-        initObservers()
-    }
-
-    private fun initObservers() {
-        // Collect single event
-        lifecycleScope.launchWhenStarted {
-            viewModel.singleEvent.collectLatest { event ->
-                when (event) {
-                    is ArticlesListContract.SingleEvent.OpenArticle -> displayArticle(event.url)
-                }
-            }
-        }
+        setContent { MainScreen(viewModel = viewModel) {url -> displayArticle(url)} }
     }
 
     private fun displayArticle(url : String) {
