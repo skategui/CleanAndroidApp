@@ -5,16 +5,16 @@ Sample app using the latest android tools.
 ### Architecture, language and tools used to make this app 💪
 
 - 🔨Kotlin : Language of dev
-- ♻️ MVI (Model View Intent) : It's an unidirectional flow a reducer to create the new State . [baseviewmodel](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/base/BaseViewModel.kt) 
-- 🧹 Clean architecture : To well structured the app [example with usecases here](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/usecases)
-- 💉 Koin : to inject deps [modules](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/di)
-- 📈 Coroutine (with Flow) : to make the app fully reactive (only the Edition summer 2022, newest version of the app) [viewmodel example](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/article/ArticlesListViewModel.kt)
-- 🛰️ Retrofit : To make HTTP requests [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/api/services/ArticlesService.kt)
-- 🏠 Room : Local DB  [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/datastore/article)
-- 👀 JUnit with Turbine and Mockk : Added 35+ unit tests to cover the code [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/test/java/agis/guillaume/cleancode/ui/article)
-- 🖼️ Compose  : Used in the summer edition 2022 [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/ui/compose)
+- ♻️ MVI (Model View Intent) : It's an unidirectional flow a reducer to create the new State. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/base/BaseViewModel.kt) 
+- 🧹 Clean architecture : To well structured the app. [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/usecases)
+- 💉 Koin : to inject deps. [soure](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/di)
+- 📈 Coroutine (with Flow) : to make the app fully reactive (only the Edition summer 2022, newest version of the app). [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/article/ArticlesListViewModel.kt)
+- 🛰️ Retrofit : To make HTTP requests. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/api/services/ArticlesService.kt)
+- 🏠 Room : Local DB. [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/datastore/article)
+- 👀 JUnit with Turbine and Mockk : Added 35+ unit tests to cover the code, [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/test/java/agis/guillaume/cleancode/ui/article)
+- 🖼️ Compose : Used in the summer edition 2022 [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/ui/compose)
 - 🖼️ View binding : Only used in the old Edition 2019, to show the other way of interacting with the views. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/post/PostListActivity.kt)
-- 🔒 Proguard  : to obfuscate and minify the code.  [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)
+- 🔒 Proguard : to obfuscate and minify the code. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)
 
 ### Usage of Flow 🤟
 
