@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Title(@StringRes id: Int) {
     Text(
+        modifier = Modifier.padding(horizontal = 24.dp),
         textAlign = TextAlign.Center,
         text = stringResource(id = id),
         fontSize = 24.sp,

@@ -9,17 +9,21 @@ class PostsListContract {
 
     // Interaction that the user performed
     sealed class Interaction : UserInteraction {
-        data class PostClicked(val post : Post) : Interaction()
+        data class PostClicked(val post: Post) : Interaction()
         object ReloadButtonClicked : Interaction()
 
     }
 
-    data class State(val posts: List<Post> = listOf(), val isLoading: Boolean = false) : UiState
+    // current state of the UI
+    data class State(
+        val posts: List<Post> = listOf(),
+        val isLoading: Boolean = false,
+        val hasErrorMsgToShow: Boolean = false,
+        val hasLostInternet: Boolean = false
+    ) : UiState
 
     // single event to display on the screen
     sealed class SingleEvent : UiSingleEvent {
-        data class DisplayErrorPopup(val message : String?= null) : SingleEvent()
-        object DisplayInternetLostMessage : SingleEvent()
         data class DisplayPostDetail(val postSelected: Post) : SingleEvent()
     }
 }

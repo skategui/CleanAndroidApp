@@ -67,6 +67,29 @@ internal class PostReducerTest {
                 PostReducer.PartialState.DisplayPosts(posts)
             )
         )
+    }
 
+    @Test
+    fun `Update Internet Message received state`() {
+
+        val state = PostsListContract.State(isLoading = true, hasLostInternet = false)
+        Assert.assertEquals(
+            state.copy(isLoading = false, hasLostInternet = true), reducer.reduce(
+                state,
+                PostReducer.PartialState.DisplayInternetLostMsg
+            )
+        )
+    }
+
+    @Test
+    fun `Update Error message received state`() {
+
+        val state = PostsListContract.State(isLoading = true, hasErrorMsgToShow = false)
+        Assert.assertEquals(
+            state.copy(isLoading = false, hasErrorMsgToShow = true), reducer.reduce(
+                state,
+                PostReducer.PartialState.DisplayErrorMsg
+            )
+        )
     }
 }

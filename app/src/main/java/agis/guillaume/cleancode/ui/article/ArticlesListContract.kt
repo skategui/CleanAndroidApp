@@ -13,13 +13,15 @@ class ArticlesListContract {
         object ReloadButtonClicked : Interaction()
     }
 
-    data class State(val articles: List<Article> = listOf(), val isLoading: Boolean = false) :
-        UiState
+    data class State(
+        val articles: List<Article> = listOf(),
+        val isLoading: Boolean = false
+    ) : UiState
 
     // single event displayed on the screen
     sealed class SingleEvent : UiSingleEvent {
         data class DisplayErrorPopup(val message: String? = null) : SingleEvent()
-        object DisplayInternetLostMessage : SingleEvent()
+        object DisplayInternetLostPopup : SingleEvent()
         data class OpenArticle(val url: String) : SingleEvent()
     }
 }

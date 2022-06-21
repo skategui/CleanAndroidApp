@@ -9,6 +9,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
@@ -27,7 +28,9 @@ class ArticlesListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ArticleMainScreen(viewModel = viewModel) { url -> displayArticle(url)} }
+            ArticleMainScreen(viewModel = viewModel) { url -> displayArticle(url) }
+        }
+        lifecycle.addObserver(viewModel)
     }
 
     private fun displayArticle(url : String) {

@@ -44,7 +44,7 @@ class PostListActivity : AppCompatActivity() {
     }
 
     private fun initView(){
-        // display message with no loaded list
+        displayEmptyListMessage()
         initAnimation()
         initRecyclerView()
         initViews()
@@ -70,19 +70,18 @@ class PostListActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
+        lifecycle.addObserver(viewModel)
         lifecycleScope.launchWhenStarted {
 
             binding.reloadBtn.setOnClickListener { viewModel.setEvent(PostsListContract.Interaction.ReloadButtonClicked) }
 
-            viewModel.uiState.collect { state -> currentState(state.posts, state.isLoading) }
+            viewModel.uiState.collect { state -> currentState(state) }
         }
 
         // Collect single event
         lifecycleScope.launchWhenStarted {
             viewModel.singleEvent.collectLatest { event ->
                 when (event) {
-                    is PostsListContract.SingleEvent.DisplayErrorPopup -> displayError()
-                    PostsListContract.SingleEvent.DisplayInternetLostMessage -> noInternet()
                     is PostsListContract.SingleEvent.DisplayPostDetail -> postDetailComingSoon(event.postSelected)
                 }
             }
@@ -108,6 +107,48 @@ class PostListActivity : AppCompatActivity() {
     }
 
 
+
+
+    /**
+     * put the views in their original state
+     */
+    private fun initViews()  = with(binding) {
+        animation.clearAnimation()
+        postsList.visible()
+        reloadBtn.gone()
+    }
+
+    /**
+     * Check the state of the loading animation
+     * @param state  current state
+     */
+    private fun currentState(state : PostsListContract.State){
+        if (state.isLoading) {
+            displayLoader()
+        } else {
+            hideLoader()
+            displayPosts(state.posts)
+        }
+        if (state.hasErrorMsgToShow)
+            displayError()
+        if (state.hasLostInternet)
+            noInternet()
+    }
+
+    private fun displayLoader()  = with(binding){
+        animation.setAnimation(R.raw.loading_animation)
+        animation.playAnimation()
+        stateTitle.text = getString(R.string.loading_in_progress)
+        stateContainer.visible()
+        reloadBtn.gone()
+        hideRecyclerView()
+    }
+
+    private fun hideLoader() = with(binding) {
+        stateContainer.gone()
+        postsList.visible()
+    }
+
     /**
      * Inform the user to the error
      */
@@ -117,34 +158,6 @@ class PostListActivity : AppCompatActivity() {
         stateTitle.text = getString(R.string.error_try_again_later)
         animation.playAnimation()
         hideRecyclerView()
-    }
-
-    /**
-     * put the views in their original state
-     */
-    private fun initViews()  = with(binding) {
-        currentState(emptyList(), false)
-        animation.clearAnimation()
-        postsList.visible()
-        reloadBtn.gone()
-    }
-
-    /**
-     * Check the state of the loading animation
-     * @param isLoading true if the request is still loading, false otherwise
-     */
-    private fun currentState(posts : List<Post>, isLoading: Boolean) = with(binding){
-        if (isLoading) {
-            animation.setAnimation(R.raw.loading_animation)
-            animation.playAnimation()
-            stateTitle.text = getString(R.string.loading_in_progress)
-           // stateContainer.visibility = View.VISIBLE
-            hideRecyclerView()
-        } else {
-            stateContainer.gone()
-            postsList.visible()
-            displayPosts(posts)
-        }
     }
 
     /**

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import java.security.InvalidKeyException
 
 /**
  * ArticlesUseCase is responsible to manage all the business logic related to the articles
@@ -35,8 +34,8 @@ class ArticlesUseCase(
             flow {
                 try {
                     val articles = articlesRepository.getBusinessArticles(apiKey)
-                    articleDatastore.saveArticles(articles)
                     emit(ResultOf.Success(Unit))
+                    articleDatastore.saveArticles(articles)
                 } catch (e: Exception) {
                     emit(ResultOf.Failure(exception = e))
                 }

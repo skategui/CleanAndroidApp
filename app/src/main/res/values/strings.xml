@@ -6,6 +6,7 @@
     <string name="error_no_post_available">No posts available for now</string>
     <string name="error_no_internet_connexion">You are not connected to internet</string>
     <string name="refresh">Refresh</string>
+    <string name="cancel">Cancel</string>
     <string name="post_author_info">By %s</string>
     <string name="coming_soon">Article \"%s\" is coming soon</string>
     <string name="logo_content_description">Logo of the app</string>

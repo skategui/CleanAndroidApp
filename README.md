@@ -11,7 +11,7 @@ Sample app using the latest android tools.
 - 📈 Coroutine (with Flow) : to make the app fully reactive (only the Edition summer 2022, newest version of the app). [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/article/ArticlesListViewModel.kt)
 - 🛰️ Retrofit : To make HTTP requests. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/api/services/ArticlesService.kt)
 - 🏠 Room : Local DB. [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/datastore/article)
-- 👀 JUnit with Turbine and Mockk : Added 35+ unit tests to cover the code, [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/test/java/agis/guillaume/cleancode/ui/article)
+- 👀 JUnit with Turbine and Mockk : Added 40 unit tests to cover the code, [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/test/java/agis/guillaume/cleancode/ui/article)
 - 🖼️ Compose : Used in the summer edition 2022 [source](https://github.com/skategui/CleanAndroidApp/tree/main/app/src/main/java/agis/guillaume/cleancode/ui/compose)
 - 🖼️ View binding : Only used in the old Edition 2019, to show the other way of interacting with the views. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/src/main/java/agis/guillaume/cleancode/ui/post/PostListActivity.kt)
 - 🔒 Proguard : to obfuscate and minify the code. [source](https://github.com/skategui/CleanAndroidApp/blob/main/app/proguard-rules.pro)

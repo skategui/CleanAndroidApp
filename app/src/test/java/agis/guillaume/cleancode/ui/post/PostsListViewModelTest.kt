@@ -5,6 +5,8 @@ import agis.guillaume.cleancode.model.Post
 import agis.guillaume.cleancode.model.User
 import agis.guillaume.cleancode.usecases.PostsUseCase
 import agis.guillaume.cleancode.utils.MainCoroutineRule
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import app.cash.turbine.test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -18,11 +20,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.lang.Exception
+import java.net.UnknownHostException
 
 internal class PostsListViewModelTest {
 
     @MockK
     private lateinit var usecase: PostsUseCase
+
+    @MockK
+    private lateinit var lifecycleOwner: LifecycleOwner
 
     @get:Rule
     val coroutineRule = MainCoroutineRule()
@@ -64,7 +70,8 @@ internal class PostsListViewModelTest {
     }
 
     private fun createViewModel() {
-        viewModel = PostsListViewModel(usecase, reducer, dispatcher)
+        viewModel = PostsListViewModel(usecase, reducer, 1, dispatcher)
+        viewModel.onCreate(lifecycleOwner)
     }
 
     @Test
@@ -82,17 +89,32 @@ internal class PostsListViewModelTest {
             createViewModel()
 
             viewModel.uiState.test {
-                Assert.assertEquals(
-                    PostsListContract.State(isLoading = false, posts = emptyList()), awaitItem()
-                )
+                    Assert.assertEquals(PostsListContract.State(isLoading = true, posts = emptyList()),awaitItem())
+                    dispatcher.advanceTimeBy(1)
+                    Assert.assertEquals(PostsListContract.State(isLoading = false, posts = emptyList()),awaitItem())
+                Assert.assertEquals(PostsListContract.State(posts = emptyList(), hasErrorMsgToShow = true), awaitItem())
             }
+        }
 
-            viewModel.singleEvent.test {
-                val event = awaitItem()
-                Assert.assertEquals(
-                    PostsListContract.SingleEvent.DisplayErrorPopup(errorMsg),
-                    event
+    @Test
+    fun `When loading posts is a failure due to internet error then display popup with message`() =
+        runTest {
+
+            val errorMsg = "not found"
+            coEvery { usecase.getPosts() } returns flowOf(
+                ResultOf.Failure(
+                    message = errorMsg,
+                    exception = UnknownHostException("test")
                 )
+            )
+
+            createViewModel()
+
+            viewModel.uiState.test {
+                Assert.assertEquals(PostsListContract.State(isLoading = true, posts = emptyList()),awaitItem())
+                dispatcher.advanceTimeBy(1)
+                Assert.assertEquals(PostsListContract.State(isLoading = false, posts = emptyList()),awaitItem())
+                Assert.assertEquals(PostsListContract.State(posts = emptyList(), hasLostInternet = true), awaitItem())
             }
         }
 
@@ -103,11 +125,11 @@ internal class PostsListViewModelTest {
         coEvery { usecase.getPosts() } returns flowOf(ResultOf.Success(posts))
 
         createViewModel()
-
         viewModel.uiState.test {
-            Assert.assertEquals(
-                PostsListContract.State(isLoading = false, posts = posts), awaitItem()
-            )
+            Assert.assertEquals(PostsListContract.State(isLoading = true, posts = emptyList()),awaitItem())
+            dispatcher.advanceTimeBy(1)
+            Assert.assertEquals(PostsListContract.State(isLoading = false, posts = emptyList()),awaitItem())
+            Assert.assertEquals(PostsListContract.State(isLoading = false, posts = posts), awaitItem())
         }
     }
 

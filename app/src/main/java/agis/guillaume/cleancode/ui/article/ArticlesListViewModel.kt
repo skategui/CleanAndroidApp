@@ -2,29 +2,32 @@ package agis.guillaume.cleancode.ui.article
 
 import agis.guillaume.cleancode.api.utils.HttpErrorUtils
 import agis.guillaume.cleancode.api.utils.doIfFailure
-import agis.guillaume.cleancode.api.utils.doIfSuccess
 import agis.guillaume.cleancode.base.BaseViewModel
 import agis.guillaume.cleancode.tracker.Tracker
 import agis.guillaume.cleancode.usecases.ArticlesUseCase
-import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
  * ArticlesListViewModel is responsible to handle the interaction between the user case(handling the business logic)
  * and what's happening on the UI side (display latest state, handle user interactions etc....)
+ * It will display automatically the data stored in the local DB. The fetch from the remote server will only
+ * store the data in the DB, so the flow will emit the latest version.
  */
 class ArticlesListViewModel(
     private val articlesUseCase: ArticlesUseCase,
     private val articleReducer: ArticleReducer,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit test
 ) :
-    BaseViewModel<ArticlesListContract.Interaction, ArticlesListContract.State, ArticlesListContract.SingleEvent>() {
+    BaseViewModel<ArticlesListContract.Interaction, ArticlesListContract.State, ArticlesListContract.SingleEvent>(
+        ArticlesListContract.State()
+    ) {
 
-    init {
+    override fun onCreate(owner: LifecycleOwner) {
         fetchArticles()
         renderLoadedArticles()
     }
@@ -35,17 +38,18 @@ class ArticlesListViewModel(
     private fun fetchArticles() {
         viewModelScope.launch(ioDispatcher) {
             articlesUseCase.loadArticles()
-                .onStart {
-                    setState { articleReducer.reduce(this, ArticleReducer.PartialState.DisplayLoader)
+                .onEach {
+                    setState {
+                        articleReducer.reduce(
+                            this,
+                            ArticleReducer.PartialState.DisplayLoader
+                        )
                     }
                 }
                 .collect { res ->
+                    setState { articleReducer.reduce(this, ArticleReducer.PartialState.HideLoader) }
                     res.doIfFailure { error, throwable ->
-                        setState { articleReducer.reduce(this, ArticleReducer.PartialState.HideLoader ) }
                         handleErrors(error, throwable)
-                    }
-                    res.doIfSuccess {
-                        setState { articleReducer.reduce(this, ArticleReducer.PartialState.HideLoader) }
                     }
                 }
         }
@@ -75,13 +79,11 @@ class ArticlesListViewModel(
      */
     private fun handleErrors(error: String?, throwable: Throwable?) {
         if (HttpErrorUtils.hasLostInternet(throwable))
-            setSingleEvent { ArticlesListContract.SingleEvent.DisplayInternetLostMessage }
+            setSingleEvent { ArticlesListContract.SingleEvent.DisplayInternetLostPopup }
         else
             setSingleEvent { ArticlesListContract.SingleEvent.DisplayErrorPopup(error) }
         Tracker.trackError(throwable)
     }
-
-    override fun createInitialState() = ArticlesListContract.State()
 
     /**
      * EVent received from the user interaction, from the UI

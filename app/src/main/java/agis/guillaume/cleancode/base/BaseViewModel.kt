@@ -1,5 +1,6 @@
 package agis.guillaume.cleancode.base
 
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
@@ -10,18 +11,15 @@ interface UserInteraction
 interface UiState
 interface UiSingleEvent
 
-abstract class BaseViewModel<Event : UserInteraction, State : UiState, SingleEvent : UiSingleEvent> : ViewModel() {
-
-    // Create Initial State of View
-    private val initialState : State by lazy { createInitialState() }
-    abstract fun createInitialState() : State
+abstract class BaseViewModel<Event : UserInteraction, State : UiState, SingleEvent : UiSingleEvent>(initialState2 : State) : ViewModel(),
+    DefaultLifecycleObserver {
 
     // Get Current State
    protected val currentState: State
         get() = uiState.value
 
     // UiState is current state of views.
-    private val _uiState : MutableStateFlow<State> = MutableStateFlow(initialState)
+    private val _uiState : MutableStateFlow<State> = MutableStateFlow(initialState2)
     val uiState = _uiState.asStateFlow()
 
     // UiEvent is the user actions.

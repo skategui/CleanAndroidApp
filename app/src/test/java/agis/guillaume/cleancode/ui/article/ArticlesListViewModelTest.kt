@@ -4,6 +4,7 @@ import agis.guillaume.cleancode.api.utils.ResultOf
 import agis.guillaume.cleancode.model.Article
 import agis.guillaume.cleancode.usecases.ArticlesUseCase
 import agis.guillaume.cleancode.utils.MainCoroutineRule
+import androidx.lifecycle.LifecycleOwner
 import app.cash.turbine.test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -25,6 +26,9 @@ internal class ArticlesListViewModelTest {
     @MockK
     private lateinit var usecase: ArticlesUseCase
 
+    @MockK
+    private lateinit var lifecycleOwner: LifecycleOwner
+
     @get:Rule
     val coroutineRule = MainCoroutineRule()
 
@@ -42,6 +46,7 @@ internal class ArticlesListViewModelTest {
 
     private fun createViewModel() {
         viewModel = ArticlesListViewModel(usecase, reducer, dispatcher)
+        viewModel.onCreate(lifecycleOwner)
     }
 
     @Test
@@ -74,7 +79,7 @@ internal class ArticlesListViewModelTest {
             viewModel.singleEvent.test {
                 val event = awaitItem()
                 Assert.assertEquals(
-                    ArticlesListContract.SingleEvent.DisplayInternetLostMessage,
+                    ArticlesListContract.SingleEvent.DisplayInternetLostPopup,
                     event
                 )
             }
@@ -142,6 +147,7 @@ internal class ArticlesListViewModelTest {
         viewModel.uiState.test {
             Assert.assertEquals(
                 ArticlesListContract.State(isLoading = false, articles = articles), awaitItem())
+            cancelAndConsumeRemainingEvents()
         }
     }
 
