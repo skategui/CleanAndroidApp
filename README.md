@@ -22,7 +22,7 @@ Sample app using the latest android tools.
 You should get yourself an API key from News API (https://newsapi.org/) and add it inside `variables.properties`.
 Otherwise without this, you will get an error message.
 
-![](https://github.com/skategui/CleanAndroidApp/blob/main/screenshots/error_no_key_added.png)
+![](https://github.com/skategui/CleanAndroidApp/blob/main/screenshots/error_no_key_added.png| width=200)
 
 ### Usage of Flow 🤟
 
