@@ -66,7 +66,6 @@ internal class PostsListViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-
     }
 
     private fun createViewModel() {

@@ -24,10 +24,12 @@ import kotlinx.coroutines.launch
 class PostsListViewModel(
     private val postsUseCase: PostsUseCase,
     private val postReducer: PostReducer,
-    private val delayInMs : Long = 2000,
+    private val delayInMs: Long = 2000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO // its a good practice to have the dispatcher as a param, as it's also useful for the unit test
 ) :
-    BaseViewModel<PostsListContract.Interaction, PostsListContract.State, PostsListContract.SingleEvent>(PostsListContract.State()) {
+    BaseViewModel<PostsListContract.Interaction, PostsListContract.State, PostsListContract.SingleEvent>(
+        PostsListContract.State()
+    ) {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
@@ -41,13 +43,20 @@ class PostsListViewModel(
         viewModelScope.launch(ioDispatcher) {
             postsUseCase.getPosts()
                 .onStart {
-                    setState { postReducer.reduce(this, PostReducer.PartialState.DisplayLoader )}
+                    setState { postReducer.reduce(this, PostReducer.PartialState.DisplayLoader) }
                     delay(delayInMs) // so we can see the cute little animation. Only for this app test
                 }
                 .collect { res ->
-                    setState { postReducer.reduce(this, PostReducer.PartialState.HideLoader ) }
+                    setState { postReducer.reduce(this, PostReducer.PartialState.HideLoader) }
                     res.doIfFailure { _, throwable -> handleErrors(throwable) }
-                    res.doIfSuccess { setState { postReducer.reduce(this, PostReducer.PartialState.DisplayPosts(it) ) } }
+                    res.doIfSuccess {
+                        setState {
+                            postReducer.reduce(
+                                this,
+                                PostReducer.PartialState.DisplayPosts(it)
+                            )
+                        }
+                    }
                 }
         }
     }
@@ -56,11 +65,13 @@ class PostsListViewModel(
      * Handle errors thrown while fetching the articles , emit the event associated and track the error
      *  @param throwable error thrown. Null if not existing
      */
-    private fun handleErrors( throwable: Throwable?) {
-        if (HttpErrorUtils.hasLostInternet(throwable))
-            setState { postReducer.reduce(this, PostReducer.PartialState.DisplayInternetLostMsg ) }
-        else
-            setState { postReducer.reduce(this, PostReducer.PartialState.DisplayErrorMsg ) }
+    private fun handleErrors(throwable: Throwable?) {
+        setState {
+            if (HttpErrorUtils.hasLostInternet(throwable))
+                postReducer.reduce(this, PostReducer.PartialState.DisplayInternetLostMsg)
+            else
+                postReducer.reduce(this, PostReducer.PartialState.DisplayErrorMsg)
+        }
         Tracker.trackError(throwable)
     }
 

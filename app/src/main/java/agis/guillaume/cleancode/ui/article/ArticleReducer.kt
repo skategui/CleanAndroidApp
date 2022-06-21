@@ -19,16 +19,36 @@ class ArticleReducer {
         partialState: PartialState
     ): ArticlesListContract.State {
         return when (partialState) {
-            is PartialState.DisplayLoader -> state.copy(isLoading = true)
+            is PartialState.DisplayLoader -> state.copy(
+                isLoading = true,
+                errorMsgToShow = null,
+                hasLostInternet = false
+            )
             is PartialState.DisplayArticles -> state.copy(
                 articles = partialState.articles,
+                isLoading = false,
+                errorMsgToShow = null,
+                hasLostInternet = false
+            )
+            PartialState.HideLoader -> state.copy(
+                isLoading = false,
+                errorMsgToShow = null,
+                hasLostInternet = false
+            )
+            is PartialState.DisplayErrorMsg -> state.copy(
+                errorMsgToShow = partialState.msg,
                 isLoading = false
             )
-            PartialState.HideLoader -> state.copy(isLoading = false)
+            PartialState.DisplayInternetLostMsg -> state.copy(
+                hasLostInternet = true,
+                isLoading = false
+            )
         }
     }
 
     sealed class PartialState {
+        data class DisplayErrorMsg(val msg: String?) : PartialState()
+        object DisplayInternetLostMsg : PartialState()
         object DisplayLoader : PartialState()
         object HideLoader : PartialState()
         data class DisplayArticles(val articles: List<Article>) : PartialState()

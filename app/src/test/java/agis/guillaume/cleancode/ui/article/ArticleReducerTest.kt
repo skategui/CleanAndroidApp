@@ -1,6 +1,8 @@
 package agis.guillaume.cleancode.ui.article
 
 import agis.guillaume.cleancode.model.Article
+import agis.guillaume.cleancode.ui.post.PostReducer
+import agis.guillaume.cleancode.ui.post.PostsListContract
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
@@ -32,9 +34,10 @@ internal class ArticleReducerTest {
     @Test
     fun `Loading is true with DisplayLoader partial state is emit`() {
 
-        val state = ArticlesListContract.State(articles = articles, isLoading = false)
+        val state = ArticlesListContract.State(articles = articles, isLoading = false, errorMsgToShow = "" , hasLostInternet = true)
         Assert.assertEquals(
-            state.copy(isLoading = true), reducer.reduce(
+            state.copy(isLoading = true, hasLostInternet = false, errorMsgToShow = null),
+            reducer.reduce(
                 state,
                 ArticleReducer.PartialState.DisplayLoader
             )
@@ -44,9 +47,10 @@ internal class ArticleReducerTest {
     @Test
     fun `Loading is false with HideLoader partial state is emit`() {
 
-        val state = ArticlesListContract.State(articles = articles, isLoading = true)
+        val state = ArticlesListContract.State(articles = articles, isLoading = true, errorMsgToShow = "" , hasLostInternet = true)
         Assert.assertEquals(
-            state.copy(isLoading = false), reducer.reduce(
+            state.copy(isLoading = false, hasLostInternet = false, errorMsgToShow = null),
+            reducer.reduce(
                 state,
                 ArticleReducer.PartialState.HideLoader
             )
@@ -58,11 +62,38 @@ internal class ArticleReducerTest {
 
         val state = ArticlesListContract.State(articles = emptyList(), isLoading = true)
         Assert.assertEquals(
-            state.copy(isLoading = false, articles = articles), reducer.reduce(
+            state.copy(isLoading = false, articles = articles),
+            reducer.reduce(
                 state,
                 ArticleReducer.PartialState.DisplayArticles(articles)
             )
         )
+    }
 
+    @Test
+    fun `Update Internet Message received state`() {
+
+        val state = ArticlesListContract.State(isLoading = true, hasLostInternet = false)
+        Assert.assertEquals(
+            state.copy(isLoading = false, hasLostInternet = true),
+            reducer.reduce(
+                state,
+                ArticleReducer.PartialState.DisplayInternetLostMsg
+            )
+        )
+    }
+
+    @Test
+    fun `Update Error message received state`() {
+
+        val msg = "errorMsg"
+        val state = ArticlesListContract.State(isLoading = true, errorMsgToShow = null)
+        Assert.assertEquals(
+            state.copy(isLoading = false, errorMsgToShow = msg),
+            reducer.reduce(
+                state,
+                ArticleReducer.PartialState.DisplayErrorMsg(msg)
+            )
+        )
     }
 }

@@ -17,8 +17,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Exception
-import java.net.UnknownHostException
 import java.util.*
 
 internal class ArticlesListViewModelTest {
@@ -41,7 +39,6 @@ internal class ArticlesListViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-
     }
 
     private fun createViewModel() {
@@ -62,58 +59,6 @@ internal class ArticlesListViewModelTest {
                 ArticlesListContract.State(isLoading = false, articles = emptyList()), awaitItem())
         }
     }
-
-    @Test
-    fun `When loading article is a failure due to internet issue then display lost internet message`() =
-        runTest {
-
-            coEvery { usecase.loadArticles() } returns flowOf(ResultOf.Failure(exception = UnknownHostException()))
-            coEvery { usecase.getLoadedArticles() } returns flowOf(emptyList())
-
-            createViewModel()
-
-            viewModel.uiState.test {
-                Assert.assertEquals(
-                    ArticlesListContract.State(isLoading = false, articles = emptyList()), awaitItem())
-            }
-            viewModel.singleEvent.test {
-                val event = awaitItem()
-                Assert.assertEquals(
-                    ArticlesListContract.SingleEvent.DisplayInternetLostPopup,
-                    event
-                )
-            }
-        }
-
-    @Test
-    fun `When loading article is a failure due to unknown error then display popup with message`() =
-        runTest {
-
-            val errorMsg = "not found"
-            coEvery { usecase.loadArticles() } returns flowOf(
-                ResultOf.Failure(
-                    message = errorMsg,
-                    exception = Exception("test")
-                )
-            )
-            coEvery { usecase.getLoadedArticles() } returns flowOf(emptyList())
-
-            createViewModel()
-
-            viewModel.uiState.test {
-                Assert.assertEquals(
-                    ArticlesListContract.State(isLoading = false, articles = emptyList()), awaitItem())
-            }
-
-            viewModel.singleEvent.test {
-                val event = awaitItem()
-                Assert.assertEquals(
-                    ArticlesListContract.SingleEvent.DisplayErrorPopup(errorMsg),
-                    event
-                )
-            }
-        }
-
 
     @Test
     fun `When articles are emitted then display the list of articles`() = runTest {
@@ -145,15 +90,12 @@ internal class ArticlesListViewModelTest {
         createViewModel()
 
         viewModel.uiState.test {
-            Assert.assertEquals(
-                ArticlesListContract.State(isLoading = false, articles = articles), awaitItem())
-            cancelAndConsumeRemainingEvents()
+            Assert.assertEquals(ArticlesListContract.State(isLoading = false, articles = articles), awaitItem())
         }
     }
 
     @Test
     fun `When user click on article then open article`() = runTest {
-
 
         coEvery { usecase.loadArticles() } returns flowOf(ResultOf.Success(Unit))
         coEvery { usecase.getLoadedArticles() } returns flowOf(emptyList())

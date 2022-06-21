@@ -107,7 +107,7 @@ private fun ArticleCardItem(article: Article, openArticle: (article: Article) ->
                 fontSize = 10.sp,
                 text = stringResource(R.string.article_source, article.author, article.source),
             )
-            val formatter = SimpleDateFormat("dd/MM/yyyy hh:mm")
+            val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm")
             val formattedDate = formatter.format(article.publishedAt)
             Text(
                 modifier = Modifier.padding(horizontal = 12.dp),

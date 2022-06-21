@@ -105,6 +105,7 @@ fun displayNoInternetDialog(
                         labelResID = R.string.refresh,
                         onClick = {
                             onButtonClicked()
+                            visible.value = false
                         })
                     SmallSpacer()
                     CTAButton(

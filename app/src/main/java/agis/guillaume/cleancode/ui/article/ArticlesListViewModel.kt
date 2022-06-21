@@ -78,10 +78,12 @@ class ArticlesListViewModel(
      *  @param throwable error thrown. Null if not existing
      */
     private fun handleErrors(error: String?, throwable: Throwable?) {
-        if (HttpErrorUtils.hasLostInternet(throwable))
-            setSingleEvent { ArticlesListContract.SingleEvent.DisplayInternetLostPopup }
-        else
-            setSingleEvent { ArticlesListContract.SingleEvent.DisplayErrorPopup(error) }
+        setState {
+            if (HttpErrorUtils.hasLostInternet(throwable))
+                articleReducer.reduce(this, ArticleReducer.PartialState.DisplayInternetLostMsg)
+            else
+                articleReducer.reduce(this, ArticleReducer.PartialState.DisplayErrorMsg(error))
+        }
         Tracker.trackError(throwable)
     }
 

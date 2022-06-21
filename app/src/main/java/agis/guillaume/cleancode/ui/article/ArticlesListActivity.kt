@@ -6,10 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.collectLatest
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
@@ -27,10 +29,20 @@ class ArticlesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            ArticleMainScreen(viewModel = viewModel) { url -> displayArticle(url) }
-        }
+        setContent { ArticleMainScreen(viewModel = viewModel) }
+        initObservers()
+    }
+
+    private fun initObservers() {
+        // Collect single event
         lifecycle.addObserver(viewModel)
+        lifecycleScope.launchWhenStarted {
+            viewModel.singleEvent.collectLatest { event ->
+                when (event) {
+                    is ArticlesListContract.SingleEvent.OpenArticle -> displayArticle(event.url)
+                }
+            }
+        }
     }
 
     private fun displayArticle(url : String) {
