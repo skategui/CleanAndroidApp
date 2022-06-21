@@ -28,6 +28,7 @@ class ArticlesListViewModel(
     ) {
 
     override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
         fetchArticles()
         renderLoadedArticles()
     }

@@ -7,6 +7,7 @@ import agis.guillaume.cleancode.ui.compose.ColorWhite
 import agis.guillaume.cleancode.ui.compose.component.MediumSpacer
 import agis.guillaume.cleancode.ui.compose.component.SmallSpacer
 import agis.guillaume.cleancode.ui.compose.component.Title
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

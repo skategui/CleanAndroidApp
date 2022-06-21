@@ -26,7 +26,8 @@ import com.airbnb.lottie.compose.*
 
 @Composable
 fun displayErrorDialog(
-    errorMsg: MutableState<String?>){
+    errorMsg: MutableState<String?>
+) {
     if (errorMsg.value != null) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sad_smiley))
         val progress by animateLottieCompositionAsState(

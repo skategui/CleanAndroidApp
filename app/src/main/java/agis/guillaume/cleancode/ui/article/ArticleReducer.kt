@@ -26,9 +26,7 @@ class ArticleReducer {
             )
             is PartialState.DisplayArticles -> state.copy(
                 articles = partialState.articles,
-                isLoading = false,
-                errorMsgToShow = null,
-                hasLostInternet = false
+                isLoading = false
             )
             PartialState.HideLoader -> state.copy(
                 isLoading = false,
