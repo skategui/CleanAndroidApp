@@ -22,10 +22,14 @@ Sample app using the latest android tools.
 You should get yourself an API key from News API (https://newsapi.org/) and add it inside `variables.properties`.
 Otherwise without this, you will get an error message.
 
+![](https://github.com/skategui/CleanAndroidApp/blob/main/screenshots/error_no_key_added.png)
+
 ### Usage of Flow 🤟
 
 Inside the ArticleDatastore, ArticleDao and ArticleUseCase, as soon as the local DB is updated, then a flow will emit the latest version of the article
 to the viewmodel , and then render this new list of articles on the view. It's fully **reactive**.
+
+![](https://github.com/skategui/CleanAndroidApp/blob/main/screenshots/news.png)
 
 PostActivity is an old app I 've made in 2019 and just make it "up to date". Better to watch the code about ArticleActivity as it contains Compose, Coroutine Flow, MVI, etc...
 
