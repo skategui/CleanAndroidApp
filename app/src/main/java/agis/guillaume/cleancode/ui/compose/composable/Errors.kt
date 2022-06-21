@@ -48,8 +48,8 @@ fun displayErrorDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Title(errorMsg.value ?: stringResource(id = R.string.error_try_again_later))
                     BigSpacer()
+                    Title(errorMsg.value ?: stringResource(id = R.string.error_try_again_later))
                     LottieAnimation(
                         composition,
                         progress,
