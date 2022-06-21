@@ -4,6 +4,7 @@ import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.model.Article
 import agis.guillaume.cleancode.ui.compose.ColorPrimary
 import agis.guillaume.cleancode.ui.compose.ColorWhite
+import agis.guillaume.cleancode.ui.compose.Shapes
 import agis.guillaume.cleancode.ui.compose.component.MediumSpacer
 import agis.guillaume.cleancode.ui.compose.component.SmallSpacer
 import agis.guillaume.cleancode.ui.compose.component.Title
@@ -71,7 +72,8 @@ private fun ArticleCardItem(article: Article, openArticle: (article: Article) ->
             .fillMaxWidth()
             .padding(15.dp)
             .clickable { openArticle(article) },
-        elevation = 10.dp
+        elevation = 10.dp,
+        shape = Shapes.medium
     ) {
         Column {
             AsyncImage(
