@@ -17,6 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.net.UnknownHostException
 import java.util.*
 
 internal class ArticlesListViewModelTest {
@@ -135,4 +136,40 @@ internal class ArticlesListViewModelTest {
             usecase.loadArticles()
         }
     }
+
+    @Test
+    fun `When loading article is a failure due to internet issue then display lost internet message`() =
+        runTest {
+
+            coEvery { usecase.loadArticles() } returns flowOf(ResultOf.Failure(exception = UnknownHostException()))
+            coEvery { usecase.getLoadedArticles() } returns flowOf(emptyList())
+
+            createViewModel()
+
+            viewModel.uiState.test {
+                Assert.assertEquals(ArticlesListContract.State(hasLostInternet = true), awaitItem())
+            }
+        }
+
+    @Test
+    fun `When loading article is a failure due to unknown error then display popup with message`() =
+        runTest {
+
+            val errorMsg = "not found"
+            coEvery { usecase.loadArticles() } returns flowOf(
+                ResultOf.Failure(
+                    message = errorMsg,
+                    exception = Exception("test")
+                )
+            )
+            coEvery { usecase.getLoadedArticles() } returns flowOf(emptyList())
+
+            createViewModel()
+
+            viewModel.uiState.test {
+                Assert.assertEquals(
+                    ArticlesListContract.State(errorMsgToShow = errorMsg), awaitItem())
+            }
+        }
+
 }
