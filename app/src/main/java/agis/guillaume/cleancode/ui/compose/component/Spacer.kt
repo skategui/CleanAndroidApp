@@ -1,4 +1,4 @@
-package agis.guillaume.cleancode.ui.compose
+package agis.guillaume.cleancode.ui.compose.component
 
 import agis.guillaume.cleancode.R
 import androidx.compose.foundation.layout.Spacer

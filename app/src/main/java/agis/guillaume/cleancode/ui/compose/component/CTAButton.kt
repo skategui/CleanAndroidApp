@@ -1,10 +1,10 @@
-package agis.guillaume.cleancode.ui.compose
+package agis.guillaume.cleancode.ui.compose.component
 
 import agis.guillaume.cleancode.R
+import agis.guillaume.cleancode.ui.compose.Shapes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -39,7 +39,7 @@ fun CTAButton(@StringRes labelResID: Int, onClick: () -> Unit) {
             pressedElevation = 15.dp,
             disabledElevation = 0.dp
         ),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.btn_radius).value.dp)
+        shape = Shapes.large
     ) {
         Text(
             text = stringResource(labelResID),

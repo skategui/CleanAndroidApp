@@ -81,15 +81,12 @@ internal class ArticlesUseCaseTest {
     @Test
     fun `When loading article without updating the API key will throw an error`() = runTest {
 
-        val errorrMsg = "my error"
-
         val usecase = ArticlesUseCase(repo, datastore, ArticlesUseCase.API_KEY_NOT_ADDED)
 
-        coEvery { repo.getBusinessArticles(apiKey) } throws Exception(errorrMsg)
         usecase.loadArticles().test {
             val res = awaitItem()
             val failureMsg = res as ResultOf.Failure
-            Assert.assertEquals(ArticlesUseCase.API_KEY_ERROR_MSG, failureMsg.exception!!.message)
+            Assert.assertEquals(ArticlesUseCase.API_KEY_ERROR_MSG, failureMsg.message)
             awaitComplete()
         }
     }

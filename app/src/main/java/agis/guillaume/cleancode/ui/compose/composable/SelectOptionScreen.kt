@@ -1,24 +1,21 @@
-package agis.guillaume.cleancode.ui.select
+package agis.guillaume.cleancode.ui.compose.composable
 
 
 import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.ui.article.ArticlesListActivity
-import agis.guillaume.cleancode.ui.compose.BigSpacer
-import agis.guillaume.cleancode.ui.compose.CTAButton
-import agis.guillaume.cleancode.ui.compose.MediumSpacer
+import agis.guillaume.cleancode.ui.compose.component.BigSpacer
+import agis.guillaume.cleancode.ui.compose.component.CTAButton
+import agis.guillaume.cleancode.ui.compose.ColorWhite
+import agis.guillaume.cleancode.ui.compose.component.MediumSpacer
 import agis.guillaume.cleancode.ui.post.PostListActivity
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -28,13 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
-fun MainScreen() {
+fun SelectOptionScreen() {
     val context = LocalContext.current
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(ColorWhite),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -79,5 +75,5 @@ fun MainScreen() {
 @Composable
 @Preview
 fun displayMainScreenPreview(){
-    MainScreen()
+    SelectOptionScreen()
 }

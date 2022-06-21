@@ -1,10 +1,12 @@
-package agis.guillaume.cleancode.ui.compose
+package agis.guillaume.cleancode.ui.compose.composable
 
 import agis.guillaume.cleancode.R
 import agis.guillaume.cleancode.model.Article
-import agis.guillaume.cleancode.ui.article.ArticlesListContract
-import agis.guillaume.cleancode.ui.article.ArticlesListViewModel
-import android.util.Log
+import agis.guillaume.cleancode.ui.compose.ColorPrimary
+import agis.guillaume.cleancode.ui.compose.ColorWhite
+import agis.guillaume.cleancode.ui.compose.component.MediumSpacer
+import agis.guillaume.cleancode.ui.compose.component.SmallSpacer
+import agis.guillaume.cleancode.ui.compose.component.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,13 +16,10 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -35,66 +34,6 @@ import com.airbnb.lottie.compose.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Composable
-fun MainScreen(
-    viewModel: ArticlesListViewModel,
-    openArticle: (url: String) -> Unit
-) {
-    val state by viewModel.uiState.collectAsState()
-    Log.e("ERROR", "state : $state")
-    when {
-        state.isLoading -> LoadingStateContent()
-        state.articles.isNotEmpty() -> displayListArticlesContent(state.articles) { article ->
-            viewModel.setEvent(
-                ArticlesListContract.Interaction.ArticleClicked(article)
-            )
-        }
-        state.articles.isEmpty() -> displayEmptyArticleContent()
-    }
-
-
-    val singleEvent by viewModel.singleEvent.collectAsState(initial = null)
-    when (singleEvent) {
-        is ArticlesListContract.SingleEvent.DisplayErrorPopup -> displayErrorContent((singleEvent as ArticlesListContract.SingleEvent.DisplayErrorPopup).message)
-        is ArticlesListContract.SingleEvent.DisplayInternetLostMessage -> displayNoInternetContent()
-        is ArticlesListContract.SingleEvent.OpenArticle -> openArticle((singleEvent as ArticlesListContract.SingleEvent.OpenArticle).url)
-        null -> {}
-    }
-}
-
-// LOADING STATE CONTENT
-
-@Composable
-fun LoadingStateContent() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Title(id = R.string.loading_in_progress)
-        BigSpacer()
-        LottieAnimation(
-            composition,
-            progress,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.animation_size).value.dp)
-        )
-    }
-}
-
-@Composable
-@Preview
-fun loadingPreview() {
-    LoadingStateContent()
-}
-
 
 // LIST ARTICLES CONTENT
 
@@ -107,7 +46,7 @@ fun displayListArticlesContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(ColorWhite),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MediumSpacer()
@@ -217,7 +156,7 @@ fun displayEmptyArticleContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(ColorWhite),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -236,83 +175,3 @@ fun displayEmptyArticleContent() {
 fun emptyListPreview() {
     displayEmptyArticleContent()
 }
-
-
-// ERROR CONTENT
-
-@Composable
-fun displayErrorContent(errorMsg: String? = null) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sad_smiley))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp)
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Title(errorMsg ?: stringResource(id = R.string.error_try_again_later))
-        MediumSpacer()
-        LottieAnimation(
-            composition,
-            progress,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.animation_size).value.dp)
-        )
-    }
-}
-
-@Composable
-@Preview
-fun displayErrorPreview() {
-    displayErrorContent()
-}
-
-
-// NO INTERNET CONTENT
-
-@Composable
-fun displayNoInternetContent() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error_animation))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp)
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Title(id = R.string.error_no_internet_connexion)
-        MediumSpacer()
-        LottieAnimation(
-            composition,
-            progress,
-            modifier = Modifier.size(dimensionResource(id = R.dimen.animation_size).value.dp)
-        )
-        BigSpacer()
-        CTAButton(
-            labelResID = R.string.refresh,
-            onClick = {
-                // TO DO
-            })
-    }
-}
-
-
-@Composable
-@Preview
-fun displayNoInternetPreview() {
-    displayNoInternetContent()
-}
-

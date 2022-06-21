@@ -1,7 +1,7 @@
 package agis.guillaume.cleancode.ui.article
 
 import agis.guillaume.cleancode.tracker.Tracker
-import agis.guillaume.cleancode.ui.compose.MainScreen
+import agis.guillaume.cleancode.ui.compose.composable.ArticleMainScreen
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -26,7 +26,8 @@ class ArticlesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MainScreen(viewModel = viewModel) {url -> displayArticle(url)} }
+        setContent {
+            ArticleMainScreen(viewModel = viewModel) { url -> displayArticle(url)} }
     }
 
     private fun displayArticle(url : String) {
